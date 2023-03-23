@@ -4,25 +4,31 @@
  * push - pushes an element to the stack
  * @stack: stack to be pushed to
  * @line_number: current line_number
+ * @mode: mode of insertion
+ * @buffer: current line from file
  *
  * Return: nothing or EXIT_FAILURE
  */
-void push(stack_t **stack, unsigned int line_number)
+void push(stack_t **stack, unsigned int line_number, char *mode, char *buffer)
 {
 	int value, i;
+	char *portion, str[100];
 
-	for (i = 0; args[1][i] != '\0'; i++)
+	strcpy(str, buffer);
+	portion = strtok(str, " ");
+	portion = strtok(NULL, " ");
+	for (i = 0; portion[i] != '\0'; i++)
 	{
-		if (args[1][i] < '0' || args[1][i] > '9')
+		if (portion[i] < '0' || portion[i] > '9')
 		{
 			fprintf(stderr, "L%d: usage: push integer\n",
 				line_number);
 			free_list(head);
-			free_array(args);
+			free(buffer);
 			exit(EXIT_FAILURE);
 		}
 	}
-	value = atoi(args[1]);
+	value = atoi(portion);
 	if (strcmp(mode, "stack") == 0)
 		insert(stack, value);
 	else if (strcmp(mode, "queue") == 0)
@@ -54,18 +60,14 @@ void pint(stack_t **stack, unsigned int line_number)
 {
 	if ((*stack) == NULL)
 	{
-		fprintf(stderr, "L%d: can't pint, stack empty\n",
-			line_number);
+		fprintf(stderr, "L%d: can't pint, stack empty\n", line_number);
 		free_list(head);
-		free_array(args);
 		exit(EXIT_FAILURE);
 	}
 	if ((*stack)->prev != NULL)
 	{
 		while ((*stack)->prev != NULL)
-		{
 			(*stack) = (*stack)->prev;
-		}
 	}
 	printf("%d\n", (*stack)->n);
 }
@@ -83,11 +85,9 @@ void pop(stack_t **stack, unsigned int line_number)
 	{
 		fprintf(stderr, "L%d: can't pop an empty stack\n",
 			line_number);
-		free_list(*stack);
-		free_array(args);
 		exit(EXIT_FAILURE);
 	}
-	del_top(*stack);
+	del_top(stack);
 }
 
 /**
@@ -106,7 +106,6 @@ void swap(stack_t **stack, unsigned int line_number)
 		fprintf(stderr, "L%d: can't swap, stack too short\n",
 			line_number);
 		free_list(*stack);
-		free_array(args);
 		exit(EXIT_FAILURE);
 	}
 	if ((*stack)->prev != NULL)

@@ -1,28 +1,8 @@
 #include "monty.h"
 
 /**
- * free_array - frees an array of arguments
- * @array: array to be freed
- *
- * Return: nothing
- */
-void free_array(char **array)
-{
-	int i;
-
-	if (array != NULL)
-	{
-		for (i = 0; array[i] != NULL; i++)
-		{
-			free(array[i]);
-		}
-		free(array);
-	}
-}
-
-/**
  * free_list - frees a linked list
- * @head: pointer to top of the list
+ * @top: pointer to top of the list
  *
  * Return: nothing
  */

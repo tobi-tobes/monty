@@ -16,7 +16,6 @@ void insert(stack_t **head, const int n)
 	{
 		fprintf(stderr, "Error: malloc failed\n");
 		free_list(*head);
-		free_array(args);
 		exit(EXIT_FAILURE);
 	}
 
@@ -60,7 +59,6 @@ void insert_end(stack_t **head, const int n)
 	{
 		fprintf(stderr, "Error: malloc failed\n");
 		free_list(*head);
-		free_array(args);
 		exit(EXIT_FAILURE);
 	}
 
@@ -87,21 +85,23 @@ void insert_end(stack_t **head, const int n)
  *
  * Return: nothing
  */
-void del_top(stack_t *head)
+void del_top(stack_t **head)
 {
 	stack_t *temp;
 
-	temp = head;
+	temp = (*head);
 	if (temp->prev != NULL)
 	{
 		while (temp->prev != NULL)
 			temp = temp->prev;
 	}
 	if (temp->next == NULL && temp->prev == NULL)
-		head = NULL;
-	else if (temp->prev == NULL && temp->next != NULL)
 	{
-		head = temp->next;
+		(*head) = NULL;
+	}
+	else if (temp->next != NULL && temp->prev == NULL)
+	{
+		(*head) = temp->next;
 		temp->next->prev = NULL;
 	}
 	free(temp);

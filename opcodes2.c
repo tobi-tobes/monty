@@ -16,7 +16,6 @@ void add(stack_t **stack, unsigned int line_number)
 		fprintf(stderr, "L%d: can't add, stack too short\n",
 			line_number);
 		free_list(*stack);
-		free_array(args);
 		exit(EXIT_FAILURE);
 	}
 	if ((*stack)->prev != NULL)
@@ -38,12 +37,12 @@ void add(stack_t **stack, unsigned int line_number)
  */
 void nop(stack_t **stack, unsigned int line_number)
 {
-	(void) line_number;
 	(void) stack;
+	(void) line_number;
 }
 
 /**
- * sub - subtracts the top element from the second top element of the stack
+ * sub - subtracts the top element of the stack from the second top element of the stack
  * @stack: stack to be pushed to
  * @line_number: current line_number
  *
@@ -58,7 +57,6 @@ void sub(stack_t **stack, unsigned int line_number)
 		fprintf(stderr, "L%d: can't add, stack too short\n",
 			line_number);
 		free_list(*stack);
-		free_array(args);
 		exit(EXIT_FAILURE);
 	}
 	if ((*stack)->prev != NULL)
@@ -68,11 +66,11 @@ void sub(stack_t **stack, unsigned int line_number)
 	}
 	res = ((*stack)->next->n) - ((*stack)->n);
 	(*stack)->next->n = res;
-	pop(stack, line_no);
+	pop(stack, line_number);
 }
 
 /**
- * divd - divides the second top element by the top element of the stack
+ * divd - divides the second top element of the stack by the top element of the stack
  * @stack: stack to be pushed to
  * @line_number: current line_number
  *
@@ -87,7 +85,6 @@ void divd(stack_t **stack, unsigned int line_number)
 		fprintf(stderr, "L%d: can't add, stack too short\n",
 			line_number);
 		free_list(*stack);
-		free_array(args);
 		exit(EXIT_FAILURE);
 	}
 	if ((*stack)->prev != NULL)
@@ -99,7 +96,6 @@ void divd(stack_t **stack, unsigned int line_number)
 	{
 		fprintf(stderr, "L%d: division by zero\n", line_number);
 		free_list(*stack);
-		free_array(args);
 		exit(EXIT_FAILURE);
 	}
 	res = ((*stack)->next->n) / ((*stack)->n);
@@ -108,7 +104,7 @@ void divd(stack_t **stack, unsigned int line_number)
 }
 
 /**
- * mul - multiplies the second top element with the top element of the stack
+ * mul - multiplies the second top element of the stack with the top element of the stack
  * @stack: stack to be pushed to
  * @line_number: current line_number
  *
@@ -123,7 +119,6 @@ void mul(stack_t **stack, unsigned int line_number)
 		fprintf(stderr, "L%d: can't add, stack too short\n",
 			line_number);
 		free_list(*stack);
-		free_array(args);
 		exit(EXIT_FAILURE);
 	}
 	if ((*stack)->prev != NULL)

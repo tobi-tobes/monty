@@ -1,101 +1,89 @@
 #include "monty.h"
 
 /**
- * tokenize - splits up a string into an array of arguments
+ * clean_up - removes excess spaces from line
  * @line: string to be split
  *
- * Return: array of arguments or EXIT_FAILURE
+ * Return: nothing
  */
-char **tokenize(char *line)
+char *clean_up(char *line)
 {
-	char *portion, buffer[100], **tokens;
-	int i, j = 0, count = 0;
+	char buffer[100], *cleaned;
+	int i, j = 0, shift = 0;
 
-	for (i = 0; line[i] != '\n' && line[i] != '#'; i++)
+	while (line[shift] == ' ')
+		shift++;
+
+	for (i = shift; line[i] != '\n' && line[i] != '#'; i++)
 	{
-		if (i == 0 && line[i] == ' ')
+		if (line[i] == ' ' && line[i + 1] == ' ')
 			continue;
-		else if (i != 0 && line[i] == ' ')
-		{
-			if (line[i + 1] == ' ' && line[i - 1] == ' ')
-				continue;
-		}
+		else if (line[i] == ' ' && line[i + 1] == '\n')
+			continue;
 		else
 		{
 			buffer[j] = line[i];
 			j++;
 		}
 	}
-	printf("Created a buffer!\n");
-	printf("%s\n", buffer);
-	tokens = malloc(sizeof(char *) * 2);
-	if (tokens == NULL)
+	buffer[j] = '\0';
+	cleaned = malloc((sizeof(char) * strlen(buffer)) + 1);
+	if (cleaned == NULL)
 	{
 		fprintf(stderr, "Error: malloc failed\n");
 		free_list(head);
-		free_array(args);
 		exit(EXIT_FAILURE);
 	}
-	printf("Made it2!\n");
-	for (portion = buffer; count < 2; portion = NULL)
-	{
-		portion = strtok(portion, " ");
-		tokens[count] = malloc((sizeof(char) * strlen(portion)) + 1);
-		if (tokens[count] == NULL)
-		{
-			fprintf(stderr, "Error: malloc failed\n");
-			free_list(head);
-			free_array(args);
-			exit(EXIT_FAILURE);
-		}
-		strcpy(tokens[count], portion);
-		count++;
-	}
-	printf("Made it3!\n");
-	return (tokens);
+	strcpy(cleaned, buffer);
+	return (cleaned);
 }
 
 /**
  * execute - executes the given function
- * @args: array of arguments
+ * @buffer: line from file
+ * @line_number: line_number
  *
  * Return: nothing
  */
-void execute(char **args)
+void execute(char *buffer, unsigned int line_number)
 {
-	int i;
+	int i, length = 0;
+	static char *mode = "stack";
+	char *arg, *clean;
 	instruction_t op_codes[] = {
-		{"push", push},
-		{"pall", pall},
-		{"pint", pint},
-		{"pop", pop},
-		{"swap", swap},
-		{"add", add},
-		{"nop", nop},
-		{"sub", sub},
-		{"div", divd},
-		{"mul", mul},
-		{"mod", mod},
-		{"pchar", pchar},
-		{"pstr", pstr},
-		{"rotl", rotl},
-		{"rotr", rotr},
-		{"stack", stack},
-		{"queue", queue},
-		{NULL, NULL}
+		{"pall", pall}, {"pint", pint}, {"pop", pop}, {"swap", swap},
+		{"add", add}, {"nop", nop}, {"sub", sub}, {"div", divd},
+		{"mul", mul}, {"mod", mod}, {"pchar", pchar}, {"pstr", pstr},
+		{"rotl", rotl}, {"rotr", rotr}, {NULL, NULL}
 	};
+
+	clean = clean_up(buffer);
 	for (i = 0; op_codes[i].opcode != NULL; i++)
 	{
-		if (strcmp(op_codes[i].opcode, args[0]) == 0)
+		length = strlen(op_codes[i].opcode);
+		if (strncmp(op_codes[i].opcode, clean, length) == 0)
 		{
-			op_codes[i].f(&head, line_no);
+			op_codes[i].f(&head, line_number);
+			free(clean);
 			return;
 		}
 	}
-	fprintf(stderr, "L%d: unknown instruction %s\n", line_no, args[0]);
-	free_list(head);
-	free_array(args);
-	exit(EXIT_FAILURE);
+	if (strncmp(clean, "stack", 5) == 0)
+		mode = "stack";
+	else if (strncmp(clean, "queue", 5) == 0)
+		mode = "queue";
+	else if (strncmp(clean, "push", 4) == 0)
+		push(&head, line_number, mode, clean);
+	else
+	{
+		arg = strtok(clean, " ");
+		fprintf(stderr, "L%d: unknown instruction %s\n", line_number,
+			arg);
+		free(clean);
+		free_list(head);
+		exit(EXIT_FAILURE);
+	}
+	free(clean);
 }
 
 /**
@@ -113,9 +101,8 @@ int check_comms(char *buffer)
 		return (1);
 
 	while (buffer[i] == ' ')
-	{
 		i++;
-	}
+
 	check = buffer[i];
 	if (check == '#')
 		return (1);

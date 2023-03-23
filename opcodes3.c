@@ -1,7 +1,7 @@
 #include "monty.h"
 
 /**
- * mod - finds the remainder of the second top /  top element of the stack
+ * mod - computes remainder of the second top / the top element of the stack
  * @stack: stack to be pushed to
  * @line_number: current line_number
  *
@@ -16,7 +16,6 @@ void mod(stack_t **stack, unsigned int line_number)
 		fprintf(stderr, "L%d: can't add, stack too short\n",
 			line_number);
 		free_list(*stack);
-		free_array(args);
 		exit(EXIT_FAILURE);
 	}
 	if ((*stack)->prev != NULL)
@@ -28,7 +27,6 @@ void mod(stack_t **stack, unsigned int line_number)
 	{
 		fprintf(stderr, "L%d: division by zero\n", line_number);
 		free_list(*stack);
-		free_array(args);
 		exit(EXIT_FAILURE);
 	}
 	res = ((*stack)->next->n) % ((*stack)->n);
@@ -50,22 +48,18 @@ void pchar(stack_t **stack, unsigned int line_number)
 		fprintf(stderr, "L%d: can't pchar, stack empty\n",
 			line_number);
 		free_list(*stack);
-		free_array(args);
 		exit(EXIT_FAILURE);
 	}
 	if ((*stack)->prev != NULL)
 	{
 		while ((*stack)->prev != NULL)
-		{
 			(*stack) = (*stack)->prev;
-		}
 	}
 	if ((*stack)->n < 0 || (*stack)->n > 127)
 	{
 		fprintf(stderr, "L%d: can't pchar, value out of range\n",
 			line_number);
 		free_list(*stack);
-		free_array(args);
 		exit(EXIT_FAILURE);
 	}
 	printf("%c\n", (*stack)->n);
@@ -91,12 +85,13 @@ void pstr(stack_t **stack, unsigned int line_number)
 		while ((*stack)->prev != NULL)
 			(*stack) = (*stack)->prev;
 	}
-	while (((*stack)->n > 0 && (*stack)->n <= 127)
-	       && (*stack)->next != NULL)
+	while (((*stack)->n > 0 && (*stack)->n <= 127) &&
+	       (*stack)->next != NULL)
 	{
-		printf("%c\n", (*stack)->n);
+		printf("%c", (*stack)->n);
 		(*stack) = (*stack)->next;
 	}
+	printf("\n");
 }
 
 /**
@@ -112,17 +107,15 @@ void rotl(stack_t **stack, unsigned int line_number)
 
 	(void) line_number;
 
-	if ((*stack) != NULL && list_len((*stack)) > 2)
+	if ((*stack) != NULL && list_len((*stack)) > 1)
 	{
 		if ((*stack)->prev != NULL)
 		{
 			while ((*stack)->prev != NULL)
-			{
 				(*stack) = (*stack)->prev;
-			}
 		}
 		first = (*stack)->n;
-		pop(stack, line_no);
+		pop(stack, line_number);
 		insert_end(stack, first);
 	}
 }
@@ -137,21 +130,20 @@ void rotl(stack_t **stack, unsigned int line_number)
 void rotr(stack_t **stack, unsigned int line_number)
 {
 	int last;
+	stack_t *temp;
 
 	(void) line_number;
-
-	if ((*stack) != NULL && list_len((*stack)) > 2)
+	if ((*stack) != NULL && list_len((*stack)) > 1)
 	{
-		if ((*stack)->next != NULL)
+		temp = (*stack);
+		if (temp->next != NULL)
 		{
-			while ((*stack)->next != NULL)
-			{
-				(*stack) = (*stack)->next;
-			}
+			while (temp->next != NULL)
+				temp = temp->next;
 		}
-		last = (*stack)->n;
-		(*stack)->prev->next = NULL;
-		free((*stack));
+		last = temp->n;
+		temp->prev->next = NULL;
+		free(temp);
 		insert(stack, last);
 	}
 }
