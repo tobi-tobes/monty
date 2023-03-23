@@ -1,0 +1,1 @@
+Tasks written in Brainf*ck script
