@@ -2,7 +2,7 @@
 
 /**
  * free_list - frees a linked list
- * @top: pointer to top of the list
+ * @head: pointer to top of the list
  *
  * Return: nothing
  */

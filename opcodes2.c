@@ -42,7 +42,7 @@ void nop(stack_t **stack, unsigned int line_number)
 }
 
 /**
- * sub - subtracts the top element of the stack from the second top element of the stack
+ * sub - subtracts the top element from the second top element of the stack
  * @stack: stack to be pushed to
  * @line_number: current line_number
  *
@@ -70,7 +70,7 @@ void sub(stack_t **stack, unsigned int line_number)
 }
 
 /**
- * divd - divides the second top element of the stack by the top element of the stack
+ * divd - divides the second top element by the top element of the stack
  * @stack: stack to be pushed to
  * @line_number: current line_number
  *
@@ -104,7 +104,7 @@ void divd(stack_t **stack, unsigned int line_number)
 }
 
 /**
- * mul - multiplies the second top element of the stack with the top element of the stack
+ * mul - multiplies the second top element with the top element of the stack
  * @stack: stack to be pushed to
  * @line_number: current line_number
  *
