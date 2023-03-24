@@ -49,7 +49,7 @@ void execute(char *buffer, unsigned int line_number)
 {
 	int i, length = 0;
 	static char *mode = "stack";
-	char *arg, *clean;
+	char *clean;
 	instruction_t op_codes[] = {
 		{"pall", pall}, {"pint", pint}, {"pop", pop}, {"swap", swap},
 		{"add", add}, {"nop", nop}, {"sub", sub}, {"div", divd},
@@ -61,25 +61,27 @@ void execute(char *buffer, unsigned int line_number)
 	for (i = 0; op_codes[i].opcode != NULL; i++)
 	{
 		length = strlen(op_codes[i].opcode);
-		if (strncmp(op_codes[i].opcode, clean, length) == 0)
+		if (strncmp(op_codes[i].opcode, clean, length) == 0 &&
+		    (clean[length] == ' ' || clean[length] == '\0'))
 		{
 			op_codes[i].f(&head, line_number);
 			free(clean);
 			return;
 		}
 	}
-	if (strncmp(clean, "stack", 5) == 0 && clean[5] == ' ')
+	if (strncmp(clean, "stack", 5) == 0 &&
+	    (clean[5] == ' ' || clean[5] == '\0'))
 		mode = "stack";
-	else if (strncmp(clean, "queue", 5) == 0 && clean[5] == ' ')
+	else if (strncmp(clean, "queue", 5) == 0 &&
+		 (clean[5] == ' ' || clean[5] == '\0'))
 		mode = "queue";
-	else if (strncmp(clean, "push", 4) == 0 && (clean[4] == ' ' ||
-						    clean[4] == '\0'))
+	else if (strncmp(clean, "push", 4) == 0 &&
+		 (clean[4] == ' ' || clean[4] == '\0'))
 		push(&head, line_number, mode, clean);
 	else
 	{
-		arg = strtok(clean, " ");
 		fprintf(stderr, "L%d: unknown instruction %s\n", line_number,
-			arg);
+			strtok(clean, " "));
 		free(clean);
 		free_list(head);
 		exit(EXIT_FAILURE);
