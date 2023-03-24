@@ -85,6 +85,8 @@ void pstr(stack_t **stack, unsigned int line_number)
 		while ((*stack)->prev != NULL)
 			(*stack) = (*stack)->prev;
 	}
+	if (list_len(*stack) == 1 && ((*stack)->n < 1 || (*stack)->n > 127))
+		return;
 	while ((*stack)->next != NULL)
 	{
 		if ((*stack)->n < 1 || (*stack)->n > 127)
