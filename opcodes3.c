@@ -11,7 +11,7 @@ void mod(stack_t **stack, unsigned int line_number)
 {
 	int res;
 
-	if ((*stack) == NULL || list_len((*stack)) < 2)
+	if (list_len((*stack)) < 2)
 	{
 		fprintf(stderr, "L%d: can't add, stack too short\n",
 			line_number);
@@ -85,9 +85,10 @@ void pstr(stack_t **stack, unsigned int line_number)
 		while ((*stack)->prev != NULL)
 			(*stack) = (*stack)->prev;
 	}
-	while (((*stack)->n > 0 && (*stack)->n <= 127) &&
-	       (*stack)->next != NULL)
+	while ((*stack)->next != NULL)
 	{
+		if ((*stack)->n < 1 || (*stack)->n > 127)
+			break;
 		printf("%c", (*stack)->n);
 		(*stack) = (*stack)->next;
 	}
@@ -107,7 +108,7 @@ void rotl(stack_t **stack, unsigned int line_number)
 
 	(void) line_number;
 
-	if ((*stack) != NULL && list_len((*stack)) > 1)
+	if (list_len((*stack)) > 1)
 	{
 		if ((*stack)->prev != NULL)
 		{
@@ -133,7 +134,7 @@ void rotr(stack_t **stack, unsigned int line_number)
 	stack_t *temp;
 
 	(void) line_number;
-	if ((*stack) != NULL && list_len((*stack)) > 1)
+	if (list_len((*stack)) > 1)
 	{
 		temp = (*stack);
 		if (temp->next != NULL)

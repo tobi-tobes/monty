@@ -11,7 +11,7 @@ void add(stack_t **stack, unsigned int line_number)
 {
 	int res;
 
-	if ((*stack) == NULL || list_len((*stack)) < 2)
+	if (list_len((*stack)) < 2)
 	{
 		fprintf(stderr, "L%d: can't add, stack too short\n",
 			line_number);
@@ -52,7 +52,7 @@ void sub(stack_t **stack, unsigned int line_number)
 {
 	int res;
 
-	if ((*stack) == NULL || list_len((*stack)) < 2)
+	if (list_len((*stack)) < 2)
 	{
 		fprintf(stderr, "L%d: can't add, stack too short\n",
 			line_number);
@@ -80,7 +80,7 @@ void divd(stack_t **stack, unsigned int line_number)
 {
 	int res;
 
-	if ((*stack) == NULL || list_len((*stack)) < 2)
+	if (list_len((*stack)) < 2)
 	{
 		fprintf(stderr, "L%d: can't add, stack too short\n",
 			line_number);
@@ -114,7 +114,7 @@ void mul(stack_t **stack, unsigned int line_number)
 {
 	int res;
 
-	if ((*stack) == NULL || list_len((*stack)) < 2)
+	if (list_len((*stack)) < 2)
 	{
 		fprintf(stderr, "L%d: can't add, stack too short\n",
 			line_number);

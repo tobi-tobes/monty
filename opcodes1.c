@@ -19,7 +19,8 @@ void push(stack_t **stack, unsigned int line_number, char *mode, char *buffer)
 	portion = strtok(NULL, " ");
 	for (i = 0; portion[i] != '\0'; i++)
 	{
-		if (portion[i] < '0' || portion[i] > '9')
+		if ((portion[i] < '0' || portion[i] > '9') &&
+		    portion[i] != '-')
 		{
 			fprintf(stderr, "L%d: usage: push integer\n",
 				line_number);
@@ -101,7 +102,7 @@ void swap(stack_t **stack, unsigned int line_number)
 {
 	int temp;
 
-	if ((*stack) == NULL || list_len((*stack)) < 2)
+	if (list_len((*stack)) < 2)
 	{
 		fprintf(stderr, "L%d: can't swap, stack too short\n",
 			line_number);
