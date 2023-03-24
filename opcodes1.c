@@ -15,6 +15,13 @@ void push(stack_t **stack, unsigned int line_number, char *mode, char *buffer)
 	char *portion, str[100];
 
 	strcpy(str, buffer);
+	if (strlen(str) == 4)
+	{
+		fprintf(stderr, "L%d: usage: push integer\n", line_number);
+		free_list(head);
+		free(buffer);
+		exit(EXIT_FAILURE);
+	}
 	portion = strtok(str, " ");
 	portion = strtok(NULL, " ");
 	for (i = 0; portion[i] != '\0'; i++)

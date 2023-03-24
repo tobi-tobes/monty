@@ -68,11 +68,12 @@ void execute(char *buffer, unsigned int line_number)
 			return;
 		}
 	}
-	if (strncmp(clean, "stack", 5) == 0)
+	if (strncmp(clean, "stack", 5) == 0 && clean[5] == ' ')
 		mode = "stack";
-	else if (strncmp(clean, "queue", 5) == 0)
+	else if (strncmp(clean, "queue", 5) == 0 && clean[5] == ' ')
 		mode = "queue";
-	else if (strncmp(clean, "push", 4) == 0)
+	else if (strncmp(clean, "push", 4) == 0 && (clean[4] == ' ' ||
+						    clean[4] == '\0'))
 		push(&head, line_number, mode, clean);
 	else
 	{
@@ -123,7 +124,7 @@ int check_empty(char *buffer)
 	if (buffer[0] == '\n' || buffer[0] == '\0')
 		return (1);
 
-	for (i = 0; buffer[i] != '\0'; i++)
+	for (i = 0; buffer[i] != '\0' && buffer[i] != '\n'; i++)
 	{
 		if (buffer[i] != ' ')
 			return (0);
