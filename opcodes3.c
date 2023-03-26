@@ -85,7 +85,7 @@ void pstr(stack_t **stack, unsigned int line_number)
 		while ((*stack)->prev != NULL)
 			(*stack) = (*stack)->prev;
 	}
-	while ((*stack)->next != NULL)
+	while ((*stack) != NULL)
 	{
 		if ((*stack)->n < 1 || (*stack)->n > 127)
 			break;
